@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Book Your Slot | Games Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+<meta name="ext-resource-dependency" content="./assets/gg-wings.png" />
+<script src="./gg-supabase.js"></script>
+<meta name="ext-resource-dependency" content="./assets/lite/projector-room.jpg" />
+<meta name="ext-resource-dependency" content="./assets/exp-sim.png" />
+<meta name="ext-resource-dependency" content="./assets/exp-ps5.png" />
+<style>
+  * { box-sizing: border-box; }
+  /* Same tokens as the homepage, so the two pages cannot drift and the
+     Appearance settings can override them at runtime. */
+  :root {
+    --gg-purple: #8B2CFF;
+    --gg-blue: #1677FF;
+    --gg-neon: #B026FF;
+    --gg-highlight: #00A8FF;
+    --gg-bg: #050509;
+    --gg-bg2: #0B0B12;
+    --gg-card: #11111A;
+    --gg-head: Orbitron, sans-serif;
+    --gg-body: Inter, system-ui, sans-serif;
+    --gg-num: Rajdhani, sans-serif;
+  }
+  html, body { margin: 0; padding: 0; background: #050509; overflow-x: hidden; }
+  body { font-family: Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #00A8FF; text-decoration: none; }
+  a:hover { color: #B026FF; }
+  ::selection { background: #8B2CFF; color: #fff; }
+  select, input, button { font-family: inherit; }
+  select option { background: #11111A; color: #fff; }
+  @keyframes ggPulse { 0%,100% { opacity: .45; } 50% { opacity: .9; } }
+  /* Confirmation pass reveal: staged text lifts, the pass raises into place,
+     a single glint crosses it, and the accent bar draws. */
+  @keyframes ggFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ggVeil { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ggMark {
+    0%   { opacity: 0; transform: scale(.82) translateY(10px); filter: blur(6px); }
+    60%  { opacity: 1; filter: blur(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  }
+  @keyframes ggHalo { 0%,100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+  @keyframes ggLift {
+    from { transform: translateY(105%); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes ggRaise {
+    from { transform: translateY(26px) scale(.97); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes ggBar {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  @keyframes ggGlint {
+    0%      { background-position: 130% 0; }
+    28%,100%{ background-position: -130% 0; }
+  }
+  @keyframes ggDrift {
+    0%,100% { transform: translate3d(0,0,0) scale(1); opacity: .8; }
+    50%     { transform: translate3d(-2%, 2%, 0) scale(1.1); opacity: 1; }
+  }
+
+
+
+
+
+  @media (prefers-reduced-motion: reduce) {
+    [style*="ggLift"], [style*="ggRaise"], [style*="ggMark"], [style*="ggHalo"], [style*="ggBar"], [style*="ggGlint"],
+    [style*="ggDrift"], [style*="ggVeil"], [style*="ggPulse"] { animation: none !important; }
+  }
+</style>
+</helmet>
+
+<div style="position:relative;background:#050509;color:#fff;min-height:100vh;overflow:hidden">
+  <div style="position:absolute;top:-140px;left:-160px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(139,44,255,0.22),transparent 65%);filter:blur(30px);pointer-events:none"></div>
+  <div style="position:absolute;top:38%;right:-200px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(22,119,255,0.18),transparent 65%);filter:blur(30px);pointer-events:none"></div>
+  <div style="position:absolute;bottom:-180px;left:22%;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(176,38,255,0.14),transparent 68%);filter:blur(30px);pointer-events:none"></div>
+
+  <header style="{{ headerStyle }}">
+    <div style="max-width:1240px;margin:0 auto;padding:10px clamp(16px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:20px">
+      <a href="./Games%20Grid%20Home.dc.html" style="display:flex;flex:none;align-items:center;color:#fff">
+        <img src="./assets/gg-wings.png" alt="Games Grid" width="96" height="46" style="display:block;height:clamp(36px,3.4vw,46px);width:auto">
+      </a>
+      <a href="./Games%20Grid%20Home.dc.html" style="font-family:Orbitron,sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;color:#B7B7C5;padding:12px 18px;border-radius:10px;border:1px solid rgba(139,44,255,0.28);white-space:nowrap" style-hover="color:#00A8FF;border-color:#00A8FF">BACK TO SITE</a>
+    </div>
+  </header>
+
+  <div style="position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:clamp(24px,4vw,48px) clamp(16px,3vw,40px) 100px">
+
+    <div style="{{ heroBoxStyle }}">
+      <sc-if value="{{ isPs5 }}" hint-placeholder-val="{{ true }}">
+        <img src="./assets/exp-ps5.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(1.22) contrast(1.1) brightness(1.12)" />
+      </sc-if>
+      <sc-if value="{{ isSim }}" hint-placeholder-val="{{ false }}">
+        <img src="./assets/exp-sim.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(1.22) contrast(1.1) brightness(1.12)" />
+      </sc-if>
+      <sc-if value="{{ heroVeil }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(5,5,9,0.92) 0%,rgba(5,5,9,0.6) 38%,rgba(5,5,9,0.05) 78%,transparent 100%);pointer-events:none"></div>
+      </sc-if>
+      <div style="{{ heroPadStyle }}">
+        <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.3em;color:#00A8FF;margin-bottom:12px">BOOKING</div>
+        <h1 style="font-family:Orbitron,sans-serif;font-weight:900;font-size:clamp(26px,4vw,46px);margin:0;text-shadow:0 4px 30px rgba(5,5,9,0.9)">{{ pageTitle }}</h1>
+        <p style="margin:14px 0 0;font-size:14.5px;color:#B7B7C5;line-height:1.6;max-width:52ch">{{ intro }}</p>
+        <div style="{{ liveStyle }}">
+          <span style="{{ liveDot }}"></span>
+          <span>{{ liveNote }}</span>
+        </div>
+        <sc-if value="{{ dbError }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:14px;padding:13px 16px;border-radius:11px;background:rgba(255,91,110,0.12);border:1px solid rgba(255,91,110,0.45);font-size:13.5px;color:#FF8A98;max-width:52ch">{{ dbError }}</div>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ showRoomHero }}" hint-placeholder-val="{{ false }}">
+      <section style="margin-bottom:clamp(22px,3vw,36px);border-radius:20px;overflow:hidden;border:1px solid rgba(176,38,255,0.4);background:linear-gradient(168deg,rgba(139,44,255,0.14),rgba(17,17,26,0.95))">
+        <div style="position:relative;min-height:clamp(220px,26vw,330px)">
+          <img src="./assets/lite/projector-room.jpg" alt="Private projector room" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+          <div style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(5,5,9,0.94),rgba(5,5,9,0.35));pointer-events:none"></div>
+          <div style="position:relative;padding:clamp(24px,3vw,42px);max-width:600px">
+            <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:12px;letter-spacing:.26em;color:#00A8FF;margin-bottom:14px">YOUR PRIVATE GAME NIGHT</div>
+            <h2 style="font-family:Orbitron,sans-serif;font-weight:900;font-size:clamp(22px,3vw,38px);margin:0 0 14px;line-height:1.1">YOUR SQUAD.<br />YOUR SCREEN.<br />YOUR NIGHT.</h2>
+            <p style="margin:0;font-size:14.5px;color:#B7B7C5;line-height:1.6;max-width:40ch">A 110-inch screen, soundbar and the room to yourselves for three hours. Drinks and popcorn for five included.</p>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:1px;background:rgba(139,44,255,0.16)">
+          <sc-for list="{{ roomFeatures }}" as="r" hint-placeholder-count="8">
+            <div style="padding:16px 14px;background:rgba(17,17,26,0.92);font-family:Rajdhani,sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.06em;color:#fff;text-align:center">{{ r }}</div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showConfirmed }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ showCelebration }}" hint-placeholder-val="{{ false }}">
+        <div style="position:fixed;inset:0;z-index:200;background:#040407;display:flex;align-items:safe center;justify-content:center;padding:clamp(18px,4vw,40px);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:ggFade .5s ease both">
+
+          <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 42%, color-mix(in srgb, var(--gg-purple) 26%, transparent), transparent 70%);animation:ggDrift 22s ease-in-out infinite"></div>
+          <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 78% 74%, color-mix(in srgb, var(--gg-blue) 20%, transparent), transparent 70%);animation:ggDrift 30s ease-in-out 6s infinite"></div>
+          <div style="position:absolute;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(color-mix(in srgb, var(--gg-highlight) 24%, transparent) 1px, transparent 1px),linear-gradient(90deg, color-mix(in srgb, var(--gg-purple) 22%, transparent) 1px, transparent 1px);background-size:78px 78px;mask-image:radial-gradient(ellipse at center, #000 10%, transparent 68%);-webkit-mask-image:radial-gradient(ellipse at center, #000 10%, transparent 68%)"></div>
+
+          <div style="position:relative;width:100%;max-width:520px;margin:auto 0;padding:8px 0 24px">
+            <sc-if value="{{ showBack }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ backToForm }}" style="display:flex;align-items:center;gap:8px;margin:0 0 clamp(14px,2.4vw,20px) auto;padding:11px 16px 11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#B7B7C5;cursor:pointer;font-family:var(--gg-num);font-weight:700;font-size:12px;letter-spacing:.14em" style-hover="color:#fff;border-color:rgba(255,255,255,0.3)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                BACK — CHANGE BOOKING
+              </button>
+            </sc-if>
+
+            <sc-if value="{{ showPass }}" hint-placeholder-val="{{ true }}">
+            <div style="text-align:center;margin-bottom:clamp(22px,3.5vw,34px)">
+              <div style="position:relative;display:flex;justify-content:center;margin:0 auto clamp(18px,3vw,26px);width:clamp(190px,46vw,300px)">
+                <div style="position:absolute;inset:-22% -14%;border-radius:50%;background:radial-gradient(ellipse at center, color-mix(in srgb, var(--gg-neon) 42%, transparent), color-mix(in srgb, var(--gg-highlight) 16%, transparent) 42%, transparent 70%);filter:blur(26px);animation:ggHalo 3.6s ease-in-out 1s infinite"></div>
+                <div style="position:relative;width:100%;animation:ggMark 1.1s cubic-bezier(.16,.84,.28,1) both">
+                  <img src="./assets/gg-wings.png" alt="Games Grid" width="720" height="344" style="display:block;width:100%;height:auto;filter:drop-shadow(0 10px 34px rgba(139,44,255,0.55))">
+                  <div style="position:absolute;inset:0;pointer-events:none;-webkit-mask:url(./assets/gg-wings.png) center/contain no-repeat;mask:url(./assets/gg-wings.png) center/contain no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.85) 50%,transparent 65%);background-size:260% 100%;animation:ggGlint 4.2s cubic-bezier(.4,0,.2,1) 1.3s infinite"></div>
+                </div>
+              </div>
+
+              <div style="overflow:hidden">
+                <h2 style="font-family:var(--gg-head);font-weight:900;font-size:clamp(27px,6.4vw,50px);line-height:1.04;letter-spacing:-0.01em;margin:0;animation:ggLift .9s cubic-bezier(.16,.84,.28,1) .12s both">{{ celebrationTitle }}</h2>
+              </div>
+              <div style="overflow:hidden;margin-top:12px">
+                <p style="font-family:var(--gg-num);font-weight:700;font-size:clamp(12px,1.7vw,14px);letter-spacing:.28em;color:#7d7d8c;margin:0;animation:ggLift .9s cubic-bezier(.16,.84,.28,1) .26s both">{{ celebrationLine }}</p>
+              </div>
+            </div>
+
+            <div style="position:relative;border-radius:18px;padding:1px;background:linear-gradient(150deg,color-mix(in srgb, var(--gg-neon) 62%, transparent),color-mix(in srgb, var(--gg-blue) 38%, transparent) 44%,rgba(255,255,255,0.04));box-shadow:0 40px 90px -46px rgba(0,0,0,0.95);animation:ggRaise 1s cubic-bezier(.16,.84,.28,1) .38s both">
+              <div style="position:relative;border-radius:17px;overflow:hidden;background:linear-gradient(168deg,rgba(19,15,32,0.97),rgba(8,8,13,0.99))">
+
+                <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,0.07) 47%,transparent 62%);background-size:260% 100%;animation:ggGlint 5.5s cubic-bezier(.4,0,.2,1) 1.2s infinite"></div>
+
+                <div style="position:relative;padding:clamp(22px,3.4vw,30px) clamp(20px,3.2vw,30px) clamp(18px,2.6vw,24px)">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+                    <div>
+                      <div style="font-family:var(--gg-num);font-weight:700;font-size:10px;letter-spacing:.26em;color:#6b6b7a;margin-bottom:9px">{{ passKindLabel }}</div>
+                      <div style="font-family:var(--gg-head);font-weight:900;font-size:clamp(15px,2.2vw,19px);letter-spacing:.02em;line-height:1.25">{{ passExperience }}</div>
+                    </div>
+                    <span style="{{ passStatusStyle }}">{{ passStatus }}</span>
+                  </div>
+                </div>
+
+                <div style="position:relative;height:1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,0.16) 0 6px,transparent 6px 13px)">
+                  <span style="position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#040407"></span>
+                  <span style="position:absolute;right:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#040407"></span>
+                </div>
+
+                <div style="position:relative;padding:clamp(20px,3vw,26px) clamp(20px,3.2vw,30px);display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:clamp(16px,2.4vw,22px) 14px">
+                  <sc-for list="{{ passRows }}" as="p" hint-placeholder-count="5">
+                    <div style="{{ p.wrap }}">
+                      <div style="font-family:var(--gg-num);font-weight:600;font-size:9.5px;letter-spacing:.2em;color:#63636f;margin-bottom:7px">{{ p.k }}</div>
+                      <div style="{{ p.valueStyle }}">{{ p.v }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="position:relative;padding:clamp(16px,2.4vw,20px) clamp(20px,3.2vw,30px) clamp(20px,3vw,26px);border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px">
+                  <div>
+                    <div style="font-family:var(--gg-num);font-weight:600;font-size:9.5px;letter-spacing:.2em;color:#63636f;margin-bottom:7px">BOOKING REFERENCE</div>
+                    <div style="font-family:var(--gg-head);font-weight:900;font-size:clamp(17px,2.6vw,22px);letter-spacing:.12em;background:linear-gradient(100deg,var(--gg-neon),var(--gg-highlight));-webkit-background-clip:text;background-clip:text;color:transparent">{{ passReference }}</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-family:var(--gg-num);font-weight:600;font-size:9.5px;letter-spacing:.2em;color:#63636f;margin-bottom:7px">{{ passAmountLabel }}</div>
+                    <div style="font-family:var(--gg-num);font-weight:700;font-size:clamp(22px,3.2vw,28px);line-height:1">{{ passAmount }}</div>
+                  </div>
+                </div>
+
+                <div style="height:3px;background:linear-gradient(90deg,var(--gg-purple),var(--gg-neon) 38%,var(--gg-highlight));transform-origin:left center;animation:ggBar 1.1s cubic-bezier(.16,.84,.28,1) .9s both"></div>
+              </div>
+            </div>
+
+            </sc-if>
+
+            <sc-if value="{{ showUpi }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align:center;margin-bottom:clamp(20px,3vw,28px)">
+                <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:clamp(16px,2.6vw,22px);animation:ggVeil .8s ease both">
+                  <span style="height:1px;width:clamp(28px,8vw,54px);background:linear-gradient(90deg,transparent,color-mix(in srgb, var(--gg-neon) 60%, transparent))"></span>
+                  <span style="font-family:var(--gg-head);font-weight:900;font-size:10.5px;letter-spacing:.42em;color:#8a8a99">GAMES GRID</span>
+                  <span style="height:1px;width:clamp(28px,8vw,54px);background:linear-gradient(90deg,color-mix(in srgb, var(--gg-highlight) 60%, transparent),transparent)"></span>
+                </div>
+                <div style="overflow:hidden">
+                  <h2 style="font-family:var(--gg-head);font-weight:900;font-size:clamp(25px,5.6vw,42px);line-height:1.05;margin:0;animation:ggLift .9s cubic-bezier(.16,.84,.28,1) .12s both">{{ upiHeading }}</h2>
+                </div>
+                <div style="overflow:hidden;margin-top:11px">
+                  <p style="font-family:var(--gg-num);font-weight:700;font-size:clamp(11.5px,1.6vw,13px);letter-spacing:.26em;color:#7d7d8c;margin:0;animation:ggLift .9s cubic-bezier(.16,.84,.28,1) .24s both">{{ upiSubheading }}</p>
+                </div>
+              </div>
+
+              <div style="border-radius:16px;border:1px solid color-mix(in srgb, var(--gg-highlight) 32%, transparent);background:linear-gradient(168deg,rgba(0,168,255,0.08),rgba(10,10,16,0.96));padding:clamp(20px,3vw,26px);animation:ggRaise 1s cubic-bezier(.16,.84,.28,1) .34s both">
+
+                <sc-if value="{{ upiStepPay }}" hint-placeholder-val="{{ true }}">
+                  <div style="text-align:center">
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left">
+                      <div>
+                        <div style="font-family:var(--gg-num);font-weight:600;font-size:9.5px;letter-spacing:.2em;color:#63636f;margin-bottom:5px">BOOKING</div>
+                        <div style="font-family:var(--gg-head);font-weight:900;font-size:14px;letter-spacing:.1em;background:linear-gradient(100deg,var(--gg-neon),var(--gg-highlight));-webkit-background-clip:text;background-clip:text;color:transparent">{{ passReference }}</div>
+                      </div>
+                      <div style="text-align:right">
+                        <div style="font-family:var(--gg-num);font-weight:600;font-size:9.5px;letter-spacing:.2em;color:#63636f;margin-bottom:5px">{{ upiWhenLabel }}</div>
+                        <div style="font-family:var(--gg-num);font-weight:700;font-size:14px">{{ upiWhen }}</div>
+                      </div>
+                    </div>
+                    <div style="display:inline-block;padding:12px;border-radius:14px;background:#fff;line-height:0">
+                      <div role="img" aria-label="UPI QR code" style="{{ upiQrStyle }}"></div>
+                    </div>
+                    <div style="margin-top:16px;font-family:var(--gg-num);font-weight:700;font-size:clamp(22px,3.4vw,28px);line-height:1">{{ passAmount }}</div>
+                    <div style="margin-top:6px;font-family:var(--gg-num);font-weight:600;font-size:11.5px;letter-spacing:.14em;color:var(--gg-highlight)">{{ upiAmountNote }}</div>
+                    <div style="margin-top:8px;font-size:12.5px;color:#7d7d8c;line-height:1.6">Scan with any UPI app, or pay to<br /><span style="font-family:var(--gg-num);font-weight:700;font-size:14.5px;color:#fff">{{ upiId }}</span></div>
+                    <sc-if value="{{ upiAppHref }}" hint-placeholder-val="{{ false }}">
+                      <a href="{{ upiAppHref }}" style="display:block;margin-top:16px;padding:15px;border-radius:11px;font-family:var(--gg-head);font-size:11px;font-weight:700;letter-spacing:.14em;color:#fff;background:linear-gradient(100deg,var(--gg-purple),var(--gg-blue))">OPEN MY UPI APP</a>
+                    </sc-if>
+                    <button onClick="{{ upiPaid }}" style="width:100%;margin-top:10px;padding:15px;border-radius:11px;cursor:pointer;font-family:var(--gg-head);font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--gg-highlight);background:transparent;border:1px solid color-mix(in srgb, var(--gg-highlight) 45%, transparent)">I'VE PAID — ENTER REFERENCE</button>
+                    <button onClick="{{ upiSkip }}" style="width:100%;margin-top:9px;padding:13px;border:none;background:none;color:#7d7d8c;cursor:pointer;font-size:12.5px;font-family:var(--gg-num);font-weight:600;letter-spacing:.06em;text-decoration:underline">I'll pay at the counter instead</button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ upiStepRef }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family:var(--gg-num);font-weight:700;font-size:10px;letter-spacing:.24em;color:var(--gg-highlight);margin-bottom:12px">ENTER YOUR UPI REFERENCE</div>
+                  <p style="margin:0 0 16px;font-size:13px;color:#8a8a99;line-height:1.6">Open your UPI app, tap the payment, and copy the 12-digit UPI transaction ID or reference number.</p>
+                  <input value="{{ upiRef }}" onInput="{{ setUpiRef }}" placeholder="e.g. 428193756204" style="{{ upiFieldStyle }}" />
+                  <sc-if value="{{ upiError }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:12px;padding:12px 15px;border-radius:10px;background:rgba(255,91,110,0.09);border:1px solid rgba(255,91,110,0.4);color:#FF8A98;font-size:13px;line-height:1.55">{{ upiError }}</div>
+                  </sc-if>
+                  <button onClick="{{ submitUpiRef }}" disabled="{{ upiBusy }}" style="{{ upiSubmitStyle }}">{{ upiSubmitLabel }}</button>
+                  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-top:9px">
+                    <button onClick="{{ upiBack }}" style="padding:13px 4px;border:none;background:none;color:#7d7d8c;cursor:pointer;font-size:12.5px;font-family:var(--gg-num);font-weight:600;letter-spacing:.06em;text-decoration:underline">Back to the QR</button>
+                    <button onClick="{{ upiSkip }}" style="padding:13px 4px;border:none;background:none;color:#7d7d8c;cursor:pointer;font-size:12.5px;font-family:var(--gg-num);font-weight:600;letter-spacing:.06em;text-decoration:underline">Pay at the counter instead</button>
+                  </div>
+                </sc-if>
+
+
+              </div>
+            </sc-if>
+
+            <div style="text-align:center;margin-top:clamp(22px,3.4vw,30px);animation:ggVeil .8s ease .95s both">
+              <sc-if value="{{ showPass }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ dismissCelebration }}" style="width:100%;max-width:320px;padding:17px 30px;border:none;border-radius:12px;cursor:pointer;font-family:var(--gg-head);font-size:11.5px;font-weight:700;letter-spacing:.16em;color:#fff;background:linear-gradient(100deg,var(--gg-purple),var(--gg-blue));box-shadow:0 18px 44px -20px color-mix(in srgb, var(--gg-purple) 90%, transparent)" style-hover="translate:0 -2px">VIEW FULL DETAILS</button>
+              </sc-if>
+              <p style="margin:16px 0 0;font-size:12.5px;color:#63636f;line-height:1.6">{{ passFootnote }}</p>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <section style="{{ confirmPanelStyle }}">
+        <div style="{{ confirmBadgeWrap }}">
+          <span style="width:7px;height:7px;border-radius:50%;background:currentColor"></span>
+          <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em">{{ confirmBadge }}</span>
+        </div>
+        <h2 style="font-family:Orbitron,sans-serif;font-weight:900;font-size:clamp(22px,3vw,34px);margin:0 0 26px">{{ confirmHeading }}</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;padding:22px 0;border-top:1px solid rgba(139,44,255,0.16);border-bottom:1px solid rgba(139,44,255,0.16);margin-bottom:24px">
+          <sc-for list="{{ confirmation }}" as="c" hint-placeholder-count="6">
+            <div>
+              <div style="font-family:Rajdhani,sans-serif;font-weight:600;font-size:11px;letter-spacing:.16em;color:#6f6f80;margin-bottom:6px">{{ c.k }}</div>
+              <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:18px;color:#fff">{{ c.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:0 0 26px;font-size:14px;color:#B7B7C5;line-height:1.6">{{ confirmNote }}</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button onClick="{{ reset }}" style="font-family:Orbitron,sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;color:#fff;padding:16px 26px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(100deg,#8B2CFF,#1677FF)">BOOK ANOTHER SESSION</button>
+          <a href="./Games%20Grid%20Home.dc.html" style="font-family:Orbitron,sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;color:#fff;padding:16px 26px;border-radius:11px;border:1px solid rgba(139,44,255,0.4)" style-hover="border-color:#00A8FF;color:#00A8FF">BACK TO SITE</a>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:{{ gridCols }};gap:clamp(18px,2.4vw,30px);align-items:start">
+
+        <section style="background:linear-gradient(168deg,rgba(139,44,255,0.11),rgba(17,17,26,0.94));backdrop-filter:blur(10px);border:1px solid rgba(139,44,255,0.3);border-radius:18px;padding:clamp(20px,2.6vw,32px);display:grid;gap:20px;box-shadow:0 30px 80px -50px rgba(139,44,255,0.85)">
+
+          <label style="display:grid;gap:9px">
+            <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">EXPERIENCE</span>
+            <select value="{{ exp }}" onChange="{{ setExp }}" disabled="{{ expLocked }}" style="{{ expStyle }}">
+              <sc-for list="{{ expOptions }}" as="o" hint-placeholder-count="3">
+                <option value="{{ o.value }}">{{ o.label }}</option>
+              </sc-for>
+            </select>
+            <sc-if value="{{ expLocked }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ unlockExp }}" style="justify-self:start;padding:0;border:none;background:none;cursor:pointer;font-size:12.5px;color:#00A8FF;font-family:Rajdhani,sans-serif;font-weight:600;letter-spacing:.06em;text-decoration:underline" style-hover="color:#B026FF">Change experience</button>
+            </sc-if>
+          </label>
+
+          <label style="display:grid;gap:9px">
+            <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">DATE</span>
+            <input type="date" value="{{ date }}" min="{{ minDate }}" max="{{ maxDate }}" onChange="{{ setDate }}" style="{{ fieldStyle }}" />
+            <sc-if value="{{ rolledNote }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:12.5px;color:#F6C244;line-height:1.5">{{ rolledNote }}</span>
+            </sc-if>
+          </label>
+
+          <sc-if value="{{ isHourly }}" hint-placeholder-val="{{ true }}">
+            <label style="display:grid;gap:9px">
+              <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">DURATION</span>
+              <select value="{{ duration }}" onChange="{{ setDuration }}" style="{{ fieldStyle }}">
+                <sc-for list="{{ durationOptions }}" as="o" hint-placeholder-count="5">
+                  <option value="{{ o.value }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+
+            <div style="display:grid;gap:11px">
+              <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">AVAILABLE SLOTS — {{ durationText }}</span>
+              <sc-if value="{{ hasSlots }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:9px">
+                  <sc-for list="{{ slotButtons }}" as="b" hint-placeholder-count="8">
+                    <button onClick="{{ b.onClick }}" disabled="{{ b.disabled }}" style="{{ b.style }}">
+                      <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em">{{ b.time }}</span>
+                      <span style="font-family:Rajdhani,sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;opacity:.85">{{ b.note }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noSlots }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:22px 18px;border-radius:12px;border:1px dashed rgba(246,194,68,0.45);background:rgba(246,194,68,0.06);font-size:13.5px;color:#F6C244;line-height:1.55">No {{ durationText }} slots left on this date. Try a shorter duration or another day.</div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{ showUnitGrid }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;gap:11px">
+                <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">AVAILABLE {{ unitLabel }} — {{ slotLabel }}</span>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:9px">
+                  <sc-for list="{{ unitButtons }}" as="u" hint-placeholder-count="8">
+                    <button onClick="{{ u.onClick }}" disabled="{{ u.disabled }}" style="{{ u.style }}">
+                      <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;letter-spacing:.03em">{{ u.code }}</span>
+                      <span style="font-family:Rajdhani,sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.12em;opacity:.85">{{ u.note }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{ isRoom }}" hint-placeholder-val="{{ false }}">
+            <label style="display:grid;gap:9px">
+              <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">SLOT — FIXED 3 HOURS</span>
+              <select value="{{ roomSlot }}" onChange="{{ setRoomSlot }}" style="{{ fieldStyle }}">
+                <sc-for list="{{ roomSlotOptions }}" as="o" hint-placeholder-count="3">
+                  <option value="{{ o.value }}" disabled="{{ o.disabled }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+          </sc-if>
+
+          <label style="display:grid;gap:9px">
+            <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">PEOPLE</span>
+            <select value="{{ people }}" onChange="{{ setPeople }}" disabled="{{ peopleLocked }}" style="{{ peopleStyle }}">
+              <sc-for list="{{ peopleOptions }}" as="o" hint-placeholder-count="5">
+                <option value="{{ o.value }}">{{ o.label }}</option>
+              </sc-for>
+            </select>
+            <span style="font-size:12.5px;color:#6f6f80;line-height:1.5">{{ peopleNote }}</span>
+          </label>
+
+          <sc-if value="{{ showExtras }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;gap:10px">
+              <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#00A8FF">EXTRAS</span>
+              <sc-for list="{{ extras }}" as="x" hint-placeholder-count="1">
+                <button onClick="{{ x.toggle }}" style="{{ x.style }}">
+                  <span style="{{ x.boxStyle }}">{{ x.tick }}</span>
+                  <span style="display:grid;gap:3px;text-align:left">
+                    <span style="font-size:14px;color:#fff">{{ x.label }}</span>
+                    <span style="font-size:12.5px;color:#6f6f80">{{ x.note }}</span>
+                  </span>
+                  <span style="margin-left:auto;font-family:Rajdhani,sans-serif;font-weight:700;font-size:17px;white-space:nowrap">{{ x.amount }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(176,38,255,0.55),rgba(0,168,255,0.4),transparent)"></div>
+
+          <label style="display:grid;gap:9px">
+            <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#B026FF">NAME</span>
+            <input value="{{ name }}" onInput="{{ setName }}" placeholder="Your name" style="{{ fieldStyle }}" />
+          </label>
+
+          <label style="display:grid;gap:9px">
+            <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#B026FF">MOBILE — WHATSAPP</span>
+            <input value="{{ phone }}" onInput="{{ setPhone }}" placeholder="+91" style="{{ fieldStyle }}" />
+          </label>
+
+          <label style="display:grid;gap:9px">
+            <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.18em;color:#B026FF">EMAIL — OPTIONAL</span>
+            <input value="{{ email }}" onInput="{{ setEmail }}" placeholder="you@example.com" style="{{ fieldStyle }}" />
+          </label>
+        </section>
+
+        <aside style="position:sticky;top:88px;display:grid;gap:16px">
+          <div style="background:linear-gradient(160deg,rgba(139,44,255,0.24),rgba(22,119,255,0.13) 55%,rgba(17,17,26,0.97));border:1px solid rgba(176,38,255,0.45);border-radius:18px;padding:clamp(20px,2.2vw,28px);box-shadow:0 30px 70px -44px rgba(139,44,255,0.95)">
+            <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.2em;color:#B026FF;margin-bottom:18px">YOUR BOOKING</div>
+            <div style="display:grid;gap:13px;margin-bottom:18px">
+              <sc-for list="{{ summary }}" as="s" hint-placeholder-count="5">
+                <div style="display:flex;justify-content:space-between;gap:14px;align-items:baseline">
+                  <span style="font-size:12.5px;color:#6f6f80;font-family:Rajdhani,sans-serif;font-weight:600;letter-spacing:.1em">{{ s.k }}</span>
+                  <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;text-align:right">{{ s.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:16px;border-top:1px solid rgba(139,44,255,0.2)">
+              <span style="font-family:Orbitron,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.12em">ESTIMATED TOTAL</span>
+              <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:32px;line-height:1;background:linear-gradient(100deg,#B026FF,#00A8FF);-webkit-background-clip:text;background-clip:text;color:transparent">{{ totalText }}</span>
+            </div>
+            <sc-if value="{{ standardWas }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;font-family:Rajdhani,sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;color:#3ddc84">{{ standardWas }}</div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ holding }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:12px;padding:16px 18px;border-radius:14px;background:rgba(5,5,9,0.6);border:1px solid rgba(0,168,255,0.35)">
+              <span style="width:9px;height:9px;border-radius:50%;background:#00A8FF;animation:ggPulse 2s ease-in-out infinite;flex:none"></span>
+              <span style="font-size:13px;color:#B7B7C5">Slot held for</span>
+              <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:22px;margin-left:auto">{{ holdClock }}</span>
+            </div>
+          </sc-if>
+
+          <button onClick="{{ submit }}" disabled="{{ submitDisabled }}" style="{{ submitStyle }}">{{ submitLabel }}</button>
+          <sc-if value="{{ hint }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0;font-size:12.5px;color:#F6C244;text-align:center;line-height:1.5">{{ hint }}</p>
+          </sc-if>
+          <p style="margin:0;font-size:12px;color:#6f6f80;line-height:1.55;text-align:center">No cancellation and no refund once paid. Please arrive 10 minutes early.</p>
+        </aside>
+      </div>
+    </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const EXP = {
+  ps5: { name: "PS5", full: "PS5 GAMING", perHour: 99, prefix: "PS5", count: 7, unitLabel: "EQUIPMENT" },
+  sim: { name: "Racing Simulator", full: "CAR RACING SIMULATOR", perHour: 129, prefix: "SIM", count: 2, unitLabel: "SIMULATOR" },
+  room: { name: "Private Projector Room", full: "PRIVATE PROJECTOR ROOM", perHour: 0, prefix: "ROOM", count: 1, unitLabel: "ROOM" }
+};
+const OPEN_HOUR = 10, CLOSE_HOUR = 22, ROOM_PRICE = 1299, CTRL_RATE = 69;
+const ROOM_SLOTS = [
+  { id: "s1", label: "11:30 AM – 2:30 PM" },
+  { id: "s2", label: "3:00 PM – 6:00 PM" },
+  { id: "s3", label: "6:30 PM – 9:30 PM" }
+];
+const FROM_HASH = { "#ps5": "ps5", "#sim": "sim", "#simulator": "sim", "#room": "room", "#projector": "room" };
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+const pad = (n) => String(n).padStart(2, "0");
+
+// Lounge time is IST regardless of the visitor's device timezone. Read once at
+// load so the opening date and start hour agree with every later check.
+const IST_NOW = (() => {
+  const p = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hour12: false
+  }).formatToParts(new Date()).reduce((a, x) => { a[x.type] = x.value; return a; }, {});
+  return {
+    date: p.year + "-" + p.month + "-" + p.day,
+    hour: Number(p.hour),
+    minute: Number(p.minute)
+  };
+})();
+
+// The database stores exactly 10 digits, so "+91 98765 43210" and
+// "098765 43210" both have to lose their prefix before being sent.
+const tenDigits = (raw) => {
+  let v = String(raw || "").replace(/\D/g, "");
+  if (v.length === 12 && v.slice(0, 2) === "91") v = v.slice(2);
+  if (v.length === 11 && v.charAt(0) === "0") v = v.slice(1);
+  return v;
+};
+const iso = (d) => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+const hash = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; };
+const fmtHour = (h) => { const ap = h >= 12 ? "PM" : "AM"; const hr = h % 12 === 0 ? 12 : h % 12; return hr + ":00 " + ap; };
+const money = (n) => "₹" + n.toLocaleString("en-IN");
+
+class Component extends DCLogic {
+  state = {
+    exp: "ps5", date: IST_NOW.date, duration: 1,
+    start: Math.min(CLOSE_HOUR - 1, Math.max(OPEN_HOUR, IST_NOW.minute > 0 ? IST_NOW.hour + 1 : IST_NOW.hour)),
+    unit: "any",
+    roomSlot: "s1", people: 1,
+    name: "", phone: "", email: "",
+    celebrate: false, rates: {},
+    upi: { id: "", name: "Games Grid", qr: "" }, upiStep: "pay", upiRef: "", upiError: "", upiBusy: false,
+    holding: false, holdLeft: 600, bookingId: null, width: typeof window === "undefined" ? 1440 : window.innerWidth, locked: false, rolled: false,
+    ctrlAddon: null, addons: [], picked: [],
+    live: false, loading: true, dbError: "", hourFree: {}, roomFree: {},
+    freeStations: [], allStations: [], holdId: null, submitting: false
+  };
+
+  componentDidMount() {
+    let preset = FROM_HASH[(location.hash || "").toLowerCase()];
+    try {
+      if (preset) sessionStorage.setItem("ggLockedExp", preset);
+      else {
+        const saved = sessionStorage.getItem("ggLockedExp");
+        if (saved && EXP[saved]) preset = saved;
+      }
+    } catch (err) { /* storage unavailable */ }
+    if (preset) this.setState({ exp: preset, duration: preset === "room" ? 3 : 1, people: preset === "room" ? 5 : 1, locked: true });
+    const e = preset || this.state.exp;
+    const dur = preset === "room" ? 3 : this.state.duration;
+    if (!this.dayHasCapacity(this.istToday(), e, dur)) {
+      this.setState({ date: this.tomorrow(), start: OPEN_HOUR, roomSlot: "s1", rolled: true });
+    } else {
+      this.setState((p) => ({ start: Math.max(p.start, this.earliestHour(this.istToday())) }));
+    }
+    this._resize = () => this.setState({ width: window.innerWidth });
+    this._resize();
+    window.addEventListener("resize", this._resize);
+    this.loadAddon();
+    this.loadRates();
+    this.loadTheme();
+    this.loadUpi();
+    this._tick = setInterval(() => {
+      this.setState((s) => (s.holding && s.holdLeft > 0 ? { holdLeft: s.holdLeft - 1 } : null));
+    }, 1000);
+    setTimeout(() => this.refreshAvailability(), 40);
+    this._poll = setInterval(() => {
+      if (!this.state.holding && !this.state.bookingId) this.refreshAvailability();
+    }, 30000);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this._resize);
+    clearInterval(this._tick);
+    clearInterval(this._poll);
+  }
+
+  // Lounge time is IST. Using the device clock here made the slot list and the
+  // validation disagree whenever the visitor's timezone put them on a
+  // different calendar day.
+  istNow() {
+    const p = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hour12: false
+    }).formatToParts(new Date()).reduce((a, x) => { a[x.type] = x.value; return a; }, {});
+    return {
+      date: p.year + "-" + p.month + "-" + p.day,
+      hour: Number(p.hour),
+      minute: Number(p.minute)
+    };
+  }
+
+  istToday() { return this.istNow().date; }
+
+  earliestHour(date) {
+    const now = this.istNow();
+    const d = date || this.state.date;
+    if (d !== now.date) return OPEN_HOUR;
+    return Math.max(OPEN_HOUR, now.minute > 0 ? now.hour + 1 : now.hour);
+  }
+
+  slotStart(id) { return { s1: 11.5, s2: 15, s3: 18.5 }[id]; }
+
+  nowFloat() { const n = this.istNow(); return n.hour + n.minute / 60; }
+
+  slotPassed(id, date) {
+    return (date || this.state.date) === this.istToday() && this.nowFloat() > this.slotStart(id);
+  }
+
+  dayHasCapacity(date, exp, duration) {
+    if (exp === "room") return ROOM_SLOTS.some((r) => !this.slotPassed(r.id, date));
+    return this.earliestHour(date) + duration <= CLOSE_HOUR;
+  }
+
+  tomorrow() {
+    const [y, m, d] = this.istToday().split('-').map(Number);
+    return iso(new Date(y, m - 1, d + 1));
+  }
+
+  rollIfClosed(exp, duration) {
+    const e = exp || this.state.exp;
+    const dur = duration || this.state.duration;
+    if (this.state.date !== this.istToday()) return null;
+    if (this.dayHasCapacity(this.state.date, e, dur)) return null;
+    return { date: this.tomorrow(), start: OPEN_HOUR, roomSlot: "s1", rolled: true };
+  }
+
+  dbKind() { return { ps5: "ps5", sim: "simulator", room: "projector" }[this.state.exp]; }
+
+  // Lounge time is always IST, whatever the visitor's device says.
+  istHour(value) {
+    return Number(new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kolkata", hour: "numeric", hour12: false
+    }).format(new Date(value)));
+  }
+
+  istISO(date, hhmm) { return new Date(date + "T" + hhmm + ":00+05:30").toISOString(); }
+
+  slotHours() {
+    const out = [];
+    for (let h = this.earliestHour(); h + this.state.duration <= CLOSE_HOUR; h++) out.push(h);
+    return out;
+  }
+
+  // PS5 extras are admin-editable, so read the whole list rather than assume.
+  async loadAddon() {
+    if (!window.GG) return;
+    try {
+      const rows = await window.GG.select("addons",
+        "select=*&applies_to=eq.ps5&active=eq.true&order=label");
+      if (rows) this.setState({ addons: rows, ctrlAddon: rows.find((r) => r.code === "extra_controller") || null });
+    } catch (err) { /* fall back to the built-in controller rate */ }
+  }
+
+  // UPI details come from admin, so the owner can change the account without
+  // a code change. No UPI ID set means the whole payment step stays hidden.
+  async loadUpi() {
+    if (!window.GG) return;
+    try {
+      const rows = await window.GG.select("settings",
+        "select=key,value&key=in.(upi_id,upi_payee_name,theme_upi_qr,upi_qr_payload)");
+      if (!rows) return;
+      const map = {};
+      rows.forEach((r) => {
+        map[r.key] = typeof r.value === "string" ? r.value.replace(/^["']|["']$/g, "").trim() : "";
+      });
+      if (map.upi_id || map.theme_upi_qr) {
+        this.setState({
+          upi: {
+            id: map.upi_id || "",
+            name: map.upi_payee_name || "Games Grid",
+            qr: map.theme_upi_qr || "",
+            // Details read out of the uploaded bank QR, so a per-booking QR can
+            // be built from the exact same account.
+            payload: /^upi:\/\/pay\?/i.test(map.upi_qr_payload || "") ? map.upi_qr_payload : ""
+          }
+        });
+      }
+    } catch (err) { /* stay on pay-at-counter */ }
+  }
+
+  // Standard UPI deep link — every Indian UPI app understands it.
+  // UPI apps reject notes and payee names containing punctuation, so both are
+  // reduced to letters, digits and spaces before they go into the link.
+  upiSafe(text, max) {
+    return String(text || "").replace(/[^a-zA-Z0-9 ]/g, " ").replace(/\s+/g, " ").trim().slice(0, max || 30);
+  }
+
+  upiLink() {
+    const u = this.state.upi;
+    // Best case: reuse the bank QR's own fields (merchant code, mode…) and add
+    // only the amount, so the app sees exactly the account it already trusts.
+    if (u.payload) {
+      const [base, query] = u.payload.split("?");
+      const kept = (query || "").split("&").filter((p) => p && !/^(am|cu)=/i.test(p));
+      kept.push("am=" + this.total().toFixed(2), "cu=INR");
+      return base + "?" + kept.join("&");
+    }
+    if (!u.id) return "";
+    const pa = String(u.id).trim();
+    if (!/^[\w.\-]+@[\w.\-]+$/.test(pa)) return "";
+    const pn = this.upiSafe(u.name || "Games Grid", 25) || "Games Grid";
+    const tn = this.upiSafe("Games Grid " + String(this.state.bookingId || "").replace(/-/g, " "), 40);
+    return "upi://pay?pa=" + pa +
+      "&pn=" + encodeURIComponent(pn) +
+      "&cu=INR&am=" + this.total().toFixed(2) +
+      (tn ? "&tn=" + encodeURIComponent(tn) : "");
+  }
+
+  upiQrUrl() {
+    // Your own QR, uploaded in admin, is used in preference — it is issued by
+    // the bank so no app can reject it. It carries no amount, so the amount is
+    // shown beside it for the customer to type.
+    // The static upload is only a last resort — it cannot carry the amount.
+    if (this.state.upi.qr && !this.state.upi.payload) return this.state.upi.qr;
+    const link = this.upiLink();
+    if (!link) return "";
+    // A quiet zone (margin) and medium error correction make the code readable
+    // from a phone screen; margin:0 often fails to scan.
+    return "https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=12&ecc=M&data=" +
+      encodeURIComponent(link);
+  }
+
+  // Appearance settings apply here too, so this page cannot drift from the
+  // homepage when the owner changes a colour or font.
+  async loadTheme() {
+    if (!window.GG) return;
+    try {
+      const rows = await window.GG.select("settings", "select=key,value&key=like.theme_*");
+      if (!rows) return;
+      const map = {};
+      rows.forEach((r) => {
+        map[r.key] = typeof r.value === "string" ? r.value.replace(/^["']|["']$/g, "") : r.value;
+      });
+      const root = document.documentElement;
+      const vars = {
+        theme_purple: "--gg-purple", theme_blue: "--gg-blue",
+        theme_neon: "--gg-neon", theme_highlight: "--gg-highlight",
+        theme_bg: "--gg-bg", theme_bg2: "--gg-bg2", theme_card: "--gg-card"
+      };
+      Object.keys(vars).forEach((k) => { if (map[k]) root.style.setProperty(vars[k], map[k]); });
+      if (map.theme_head_font) root.style.setProperty("--gg-head", map.theme_head_font + ", sans-serif");
+      if (map.theme_body_font) root.style.setProperty("--gg-body", map.theme_body_font + ", system-ui, sans-serif");
+      if (map.theme_num_font) root.style.setProperty("--gg-num", map.theme_num_font + ", sans-serif");
+    } catch (err) { /* keep the built-in palette */ }
+  }
+
+  // Admin owns the rates, including whether an opening offer is running today.
+  async loadRates() {
+    if (!window.GG) return;
+    try {
+      const rows = await window.GG.select("pricing", "select=*&active=eq.true");
+      if (!rows) return;
+      const today = this.istToday();
+      const map = {};
+      rows.forEach((r) => {
+        const startedOk = !r.offer_starts_on || r.offer_starts_on <= today;
+        const notEnded = !r.offer_ends_on || r.offer_ends_on >= today;
+        map[r.kind] = {
+          standard_paise: r.standard_paise,
+          offer_paise: startedOk && notEnded ? r.offer_paise : null
+        };
+      });
+      this.setState({ rates: map });
+    } catch (err) { /* fall back to the built-in rates */ }
+  }
+
+  // The list the customer can actually tick — falls back to a plain controller
+  // row when the database is unreachable.
+  extraList() {
+    if (this.state.addons.length) return this.state.addons;
+    return [{ id: "fallback", code: "extra_controller", label: "Extra controller", price_paise: CTRL_RATE * 100, per_hour: true }];
+  }
+
+  addonCost(a) {
+    const rupees = Math.round(a.price_paise / 100);
+    return a.per_hour ? rupees * this.state.duration : rupees;
+  }
+
+  extrasCost() {
+    if (this.state.exp !== "ps5") return 0;
+    return this.extraList()
+      .filter((a) => this.state.picked.indexOf(a.code) >= 0)
+      .reduce((sum, a) => sum + this.addonCost(a), 0);
+  }
+
+  // A second controller is what allows a second player on one station.
+  hasController() {
+    return this.state.picked.indexOf("extra_controller") >= 0;
+  }
+
+  // ---- live availability -------------------------------------------------
+  async refreshAvailability() {
+    if (!window.GG) { this.setState({ live: false, loading: false }); return; }
+    const s = this.state;
+    this.setState({ loading: true });
+    try {
+      if (s.exp === "room") {
+        const out = {};
+        for (const r of ROOM_SLOTS) {
+          const startISO = this.slotISO(s.date, r.id);
+          const free = await window.GG.rpc("free_stations", {
+            p_kind: "projector",
+            p_starts_at: startISO,
+            p_ends_at: new Date(new Date(startISO).getTime() + 3 * 3600000).toISOString()
+          });
+          out[r.id] = (free || []).length > 0;
+        }
+        this.setState({ roomFree: out, live: true, loading: false });
+      } else {
+        const rows = await window.GG.rpc("day_availability", {
+          p_kind: this.dbKind(), p_date: s.date, p_hours: s.duration
+        });
+        const byHour = {};
+        (rows || []).forEach((r) => { byHour[this.istHour(r.hour_start)] = r.free_count; });
+        this.setState({ hourFree: byHour, live: true, loading: false });
+        this.refreshStations();
+      }
+    } catch (err) {
+      this.setState({ live: false, loading: false, dbError: err.message });
+    }
+  }
+
+  async refreshStations() {
+    const s = this.state;
+    if (s.exp === "room" || s.start === null) return;
+    try {
+      const startISO = this.istISO(s.date, pad(s.start) + ":00");
+      const free = await window.GG.rpc("free_stations", {
+        p_kind: this.dbKind(),
+        p_starts_at: startISO,
+        p_ends_at: new Date(new Date(startISO).getTime() + s.duration * 3600000).toISOString()
+      });
+      const all = await window.GG.select("stations", "select=id,code&kind=eq." + this.dbKind() + "&order=sort_order");
+      this.setState({
+        freeStations: free || [],
+        allStations: all || [],
+        unit: (free || []).some((f) => f.id === s.unit) ? s.unit : "any"
+      });
+    } catch (err) { /* keep previous list */ }
+  }
+
+  slotISO(date, slotId) {
+    return this.istISO(date, { s1: "11:30", s2: "15:00", s3: "18:30" }[slotId]);
+  }
+
+  unitList() {
+    if (this.state.allStations.length) return this.state.allStations;
+    const e = EXP[this.state.exp];
+    return Array.from({ length: e.count }, (_, i) => ({ id: "x" + i, code: e.prefix + " #" + (i + 1) }));
+  }
+
+  stationIsFree(id) {
+    return this.state.freeStations.some((f) => f.id === id);
+  }
+
+  hourIsFree(h) {
+    if (h + this.state.duration > CLOSE_HOUR) return false;
+    if (!this.state.live) return true;
+    return (this.state.hourFree[h] || 0) > 0;
+  }
+
+  anyFree(startHour) { return this.hourIsFree(startHour); }
+
+  roomTaken(slotId) {
+    if (!this.state.live) return false;
+    return this.state.roomFree[slotId] === false;
+  }
+
+  assignedUnit() {
+    const s = this.state;
+    if (s.exp === "room") return "Projector Room";
+    if (s.unit !== "any") {
+      const hit = this.unitList().find((u) => u.id === s.unit);
+      return hit ? hit.code : s.unit;
+    }
+    if (s.freeStations.length) return s.freeStations[0].code;
+    return "Any available";
+  }
+
+  // Rates come from admin. The constants are only a fallback for when the
+  // database cannot be reached, so a price change in admin takes effect here.
+  rate() {
+    const row = (this.state.rates || {})[this.dbKind()];
+    if (row) {
+      const paise = row.offer_paise || row.standard_paise;
+      if (paise) return Math.round(paise / 100);
+    }
+    return this.state.exp === "room" ? ROOM_PRICE : EXP[this.state.exp].perHour;
+  }
+
+  standardRate() {
+    const row = (this.state.rates || {})[this.dbKind()];
+    if (row && row.offer_paise && row.standard_paise > row.offer_paise) {
+      return Math.round(row.standard_paise / 100);
+    }
+    return 0;
+  }
+
+  total() {
+    const s = this.state;
+    if (s.exp === "room") return this.rate();
+    return this.rate() * s.duration + this.extrasCost();
+  }
+
+  ctrlRate() {
+    const a = this.state.ctrlAddon;
+    return a ? Math.round(a.price_paise / 100) : CTRL_RATE;
+  }
+
+  dateLabel() {
+    if (!this.state.date) return "—";
+    const d = new Date(this.state.date + "T00:00:00");
+    return d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+  }
+
+  timeLabel() {
+    const s = this.state;
+    if (s.exp === "room") { const r = ROOM_SLOTS.find((x) => x.id === s.roomSlot); return r ? r.label : "—"; }
+    if (s.start === null) return "Pick a slot";
+    return fmtHour(s.start) + " – " + fmtHour(s.start + s.duration);
+  }
+
+  problem() {
+    const s = this.state;
+    if (!s.date) return "Please choose a date";
+    if (s.exp !== "room") {
+      if (s.start === null) return "Please pick a slot";
+      if (s.unit === "any") return "Please pick your " + (s.exp === "sim" ? "simulator" : "station");
+      if (s.start < this.earliestHour()) return "That time has already passed — pick a later slot";
+      if (s.start + s.duration > CLOSE_HOUR) return "We close at 10:00 PM — shorten the session or start earlier";
+    }
+    if (s.exp === "room" && this.slotPassed(s.roomSlot)) return "That slot has already started — pick another date";
+    if (s.exp === "room") { if (this.roomTaken(s.roomSlot)) return "That slot is already booked — pick another"; }
+    else {
+      if (!this.anyFree(s.start)) return "That time is not available for " + s.duration + (s.duration === 1 ? " hour" : " hours");
+      if (s.unit !== "any" && s.live && !this.stationIsFree(s.unit)) {
+        const hit = this.unitList().find((u) => u.id === s.unit);
+        return (hit ? hit.code : "That station") + " is booked for this slot";
+      }
+    }
+    if (s.name.trim().length < 2) return "Please enter your name";
+    if (tenDigits(s.phone).length !== 10) return "Please enter a 10-digit mobile number";
+    return "";
+  }
+
+  field(disabled) {
+    return "padding:15px 16px;border-radius:12px;background:" + (disabled ? "rgba(11,11,18,0.5)" : "rgba(11,11,18,0.78)") +
+      ";border:1px solid rgba(139,44,255,0.42);color:" + (disabled ? "#6f6f80" : "#fff") +
+      ";font-size:15px;outline:none;width:100%;appearance:none;-webkit-appearance:none;background-image:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%23B7B7C5' stroke-width='1.8' stroke-linecap='round'/></svg>\");background-repeat:no-repeat;background-position:right 16px center;padding-right:44px;" +
+      (disabled ? "cursor:not-allowed;" : "cursor:pointer;");
+  }
+
+  renderVals() {
+    const s = this.state;
+    const e = EXP[s.exp];
+    const hourly = s.exp !== "room";
+    const [ty, tm, td] = this.istToday().split("-").map(Number);
+    const today = new Date(ty, tm - 1, td);
+    const last = new Date(ty, tm - 1, td + 29);
+    const problem = this.problem();
+
+    return {
+      gridCols: s.width < 900 ? "1fr" : "minmax(0,1.35fr) minmax(300px,0.9fr)",
+      pageTitle: "BOOK " + e.full,
+      isSim: s.exp === "sim",
+      heroBoxStyle: s.exp === "room"
+        ? "position:relative;margin-bottom:clamp(22px,3vw,36px);display:flex;align-items:flex-end"
+        : "position:relative;margin-bottom:clamp(22px,3vw,36px);border-radius:20px;overflow:hidden;border:1px solid rgba(176,38,255,0.3);min-height:clamp(200px,22vw,280px);display:flex;align-items:flex-end",
+      heroPadStyle: s.exp === "room" ? "position:relative;padding:0" : "position:relative;padding:clamp(22px,3vw,40px)",
+      heroVeil: s.exp !== "room",
+      intro: s.exp === "room"
+        ? "Fixed 3-hour slots for up to 5 people. Includes 110-inch screen, soundbar, PS5, drinks and popcorn for five."
+        : s.exp === "ps5"
+          ? "One player per station. Add a second controller for a second player at ₹" + this.ctrlRate() +
+            ((s.ctrlAddon ? s.ctrlAddon.per_hour : true) ? " per hour" : "") + ". Minimum 1 hour, maximum 5 hours."
+          : "One driver per simulator. Minimum 1 hour, maximum 5 hours.",
+
+      showRoomHero: s.exp === "room" && !s.bookingId,
+      roomFeatures: ['110" SCREEN', "SOUNDBAR", "PS5 GAMES", "MOVIES / OTT", "SOFA", "BEAN BAGS", "DRINKS × 5", "POPCORN × 5"],
+
+      showForm: !s.bookingId,
+      showConfirmed: !!s.bookingId,
+      fieldStyle: this.field(false),
+
+      exp: s.exp,
+      expLocked: s.locked,
+      unlockExp: () => {
+        try { sessionStorage.removeItem("ggLockedExp"); } catch (err) { /* ignore */ }
+        if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+        this.setState({ locked: false });
+      },
+      expStyle: this.field(s.locked),
+      expOptions: [
+        { value: "ps5", label: "PS5" },
+        { value: "sim", label: "Racing Simulator" },
+        { value: "room", label: "Private Projector Room" }
+      ].filter((o) => !s.locked || o.value === s.exp),
+      setExp: (ev) => {
+        const v = ev.target.value;
+        const dur = v === "room" ? 3 : 1;
+        const roll = this.rollIfClosed(v, dur);
+        this.setState(
+          Object.assign({ exp: v, duration: dur, unit: "any", people: v === "room" ? 5 : 1, picked: [], holding: false, roomSlot: "s1", freeStations: [], allStations: [] }, roll || { start: this.earliestHour() }),
+          () => this.refreshAvailability()
+        );
+      },
+
+      date: s.date,
+      minDate: iso(today),
+      maxDate: iso(last),
+      setDate: (ev) => {
+        const v = ev.target.value;
+        this.setState(
+          { date: v, holding: false, rolled: false, start: Math.max(s.start, this.earliestHour(v)) },
+          () => this.refreshAvailability()
+        );
+      },
+      rolledNote: s.rolled && s.date === this.tomorrow() ? "Today's slots are done — showing tomorrow, " + this.dateLabel() : false,
+
+      isHourly: hourly,
+      isRoom: s.exp === "room",
+      isPs5: s.exp === "ps5",
+
+      duration: String(s.duration),
+      durationOptions: [1, 2, 3, 4, 5].map((n) => ({ value: String(n), label: n + (n === 1 ? " hour" : " hours") })),
+      setDuration: (ev) => {
+        const dur = Number(ev.target.value);
+        const roll = this.rollIfClosed(s.exp, dur);
+        this.setState(
+          Object.assign({ duration: dur, holding: false, start: null, freeStations: [] }, roll || {}),
+          () => this.refreshAvailability()
+        );
+      },
+
+      start: String(s.start),
+      durationText: s.duration + (s.duration === 1 ? " hour" : " hours"),
+      slotButtons: this.slotHours().map((h) => {
+        const n = s.live ? (s.hourFree[h] || 0) : null;
+        const free = n === null || n > 0;
+        const active = s.start === h;
+        return {
+          time: fmtHour(h) + " – " + fmtHour(h + s.duration),
+          note: n === null ? "Select" : n === 0 ? "Fully booked" : n + " free",
+          disabled: !free,
+          onClick: () => { if (free) this.setState({ start: h, holding: false }, () => this.refreshStations()); },
+          style: "display:flex;flex-direction:column;gap:4px;align-items:flex-start;padding:13px 15px;border-radius:11px;transition:all .18s ease;" + (active
+            ? "cursor:pointer;color:#fff;background:linear-gradient(120deg,#8B2CFF,#1677FF);border:1px solid transparent;box-shadow:0 10px 26px -14px rgba(139,44,255,0.95);"
+            : free
+              ? "cursor:pointer;color:#3ddc84;background:rgba(61,220,132,0.07);border:1px solid rgba(61,220,132,0.32);"
+              : "cursor:not-allowed;color:#FF5B6E;background:rgba(255,91,110,0.06);border:1px solid rgba(255,91,110,0.24);")
+        };
+      }),
+      hasSlots: this.slotHours().some((h) => !s.live || (s.hourFree[h] || 0) > 0),
+      noSlots: s.live && !s.loading && !this.slotHours().some((h) => (s.hourFree[h] || 0) > 0),
+      setStart: (ev) => this.setState({ start: Number(ev.target.value), holding: false }, () => this.refreshStations()),
+
+      unitLabel: e.unitLabel,
+      unit: s.unit,
+      showUnitGrid: hourly && s.start !== null,
+      slotLabel: s.start === null ? "" : fmtHour(s.start) + " – " + fmtHour(s.start + s.duration),
+      unitButtons: this.unitList()
+        .map((u) => ({ id: u.id, code: u.code, free: s.live ? this.stationIsFree(u.id) : true }))
+        .map((u) => {
+          const active = s.unit === u.id;
+          return {
+            code: u.code,
+            note: u.free ? "Available" : "Booked",
+            disabled: !u.free,
+            onClick: () => { if (u.free) this.setState({ unit: u.id, holding: false }); },
+            style: "display:flex;flex-direction:column;gap:3px;align-items:flex-start;padding:12px 14px;border-radius:11px;transition:all .18s ease;" + (active
+              ? "cursor:pointer;color:#fff;background:linear-gradient(120deg,#8B2CFF,#1677FF);border:1px solid transparent;box-shadow:0 10px 26px -14px rgba(139,44,255,0.95);"
+              : u.free
+                ? "cursor:pointer;color:#3ddc84;background:rgba(61,220,132,0.07);border:1px solid rgba(61,220,132,0.32);"
+                : "cursor:not-allowed;color:#FF5B6E;background:rgba(255,91,110,0.06);border:1px solid rgba(255,91,110,0.24);")
+          };
+        }),
+      setUnit: (ev) => this.setState({ unit: ev.target.value, holding: false }),
+
+      roomSlot: s.roomSlot,
+      roomSlotOptions: ROOM_SLOTS.map((r) => {
+        const taken = this.roomTaken(r.id);
+        const past = this.slotPassed(r.id);
+        return {
+          value: r.id,
+          label: r.label + (past ? " — started" : taken ? " — booked" : s.live ? " — available" : ""),
+          disabled: taken || past
+        };
+      }),
+
+      liveOn: s.live,
+      liveNote: s.loading ? "Checking live availability…"
+        : s.live ? "Live availability — updates every 30 seconds"
+          : "Showing all slots — live availability unavailable right now",
+      liveStyle: "display:flex;align-items:center;gap:9px;margin-top:14px;font-family:Rajdhani,sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.06em;color:" +
+        (s.loading ? "#B7B7C5" : s.live ? "#3ddc84" : "#F6C244"),
+      liveDot: "width:8px;height:8px;border-radius:50%;flex:none;background:currentColor;" +
+        (s.loading || s.live ? "animation:ggPulse 1.8s ease-in-out infinite" : ""),
+      setRoomSlot: (ev) => this.setState({ roomSlot: ev.target.value, holding: false }),
+      dbError: s.dbError || false,
+
+      people: String(s.people),
+      peopleOptions: (s.exp === "room" ? [1, 2, 3, 4, 5] : s.exp === "ps5" && this.hasController() ? [2] : [1]).map((n) => ({ value: String(n), label: String(n) })),
+      peopleLocked: s.exp !== "room",
+      peopleStyle: this.field(s.exp !== "room"),
+      peopleNote: s.exp === "room" ? "Maximum 5 people per booking."
+        : s.exp === "ps5" ? (this.hasController() ? "Two players with the extra controller." : "One player per station — add a controller for a second.")
+          : "One driver per simulator.",
+      setPeople: (ev) => this.setState({ people: Number(ev.target.value) }),
+
+      showExtras: s.exp === "ps5",
+      extras: this.extraList().map((a) => {
+        const on = s.picked.indexOf(a.code) >= 0;
+        const rupees = Math.round(a.price_paise / 100);
+        return {
+          label: a.label,
+          note: "₹" + rupees + (a.per_hour ? " × " + s.duration + (s.duration === 1 ? " hour" : " hours") : " per booking") +
+            (a.code === "extra_controller" ? " — lets a 2nd player join" : ""),
+          amount: "+" + money(this.addonCost(a)),
+          tick: on ? "✓" : "",
+          boxStyle: "flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:700;" +
+            (on ? "background:linear-gradient(120deg,#8B2CFF,#1677FF);color:#fff;border:1px solid transparent;"
+                : "background:rgba(5,5,9,0.6);color:transparent;border:1px solid rgba(139,44,255,0.4);"),
+          style: "display:flex;align-items:center;gap:13px;width:100%;padding:15px 17px;border-radius:12px;cursor:pointer;transition:all .18s ease;" +
+            (on ? "background:rgba(139,44,255,0.14);border:1px solid rgba(176,38,255,0.55);"
+                : "background:rgba(5,5,9,0.5);border:1px solid rgba(139,44,255,0.2);"),
+          toggle: () => {
+            const next = on ? s.picked.filter((c) => c !== a.code) : s.picked.concat([a.code]);
+            this.setState({ picked: next, people: next.indexOf("extra_controller") >= 0 ? 2 : 1 });
+          }
+        };
+      }),
+
+      name: s.name, phone: s.phone, email: s.email,
+      setName: (ev) => this.setState({ name: ev.target.value }),
+      setPhone: (ev) => this.setState({ phone: ev.target.value }),
+      setEmail: (ev) => this.setState({ email: ev.target.value }),
+
+      summary: [
+        { k: "EXPERIENCE", v: e.name },
+        { k: "DATE", v: this.dateLabel() },
+        { k: "TIME", v: this.timeLabel() },
+        { k: s.exp === "room" ? "ROOM" : "ASSIGNED", v: this.assignedUnit() },
+        { k: "PEOPLE", v: s.exp === "room" ? s.people + " of 5" : s.people + (s.people === 1 ? " player" : " players") }
+      ].concat(hourly
+        ? [{ k: "DURATION", v: s.duration + (s.duration === 1 ? " hour" : " hours") },
+           { k: "RATE", v: money(this.rate()) + " / hour" }]
+        : [{ k: "RATE", v: money(this.rate()) + " / 3 hours" }])
+        .concat(s.exp === "ps5"
+          ? this.extraList().filter((a) => s.picked.indexOf(a.code) >= 0)
+              .map((a) => ({ k: a.label.toUpperCase(), v: money(this.addonCost(a)) }))
+          : []),
+
+      totalText: money(this.total()),
+      standardWas: this.standardRate()
+        ? "Opening offer — normally " + money(this.standardRate()) + (s.exp === "room" ? " / 3 hours" : " / hour")
+        : false,
+
+      holding: s.holding,
+      holdClock: Math.floor(Math.max(0, s.holdLeft) / 60) + ":" + pad(Math.max(0, s.holdLeft) % 60),
+
+      submitDisabled: !!problem || s.submitting,
+      submitLabel: s.submitting ? "PLEASE WAIT…" : s.holding ? "RESERVE — PAY AT COUNTER" : "CHECK & RESERVE SLOT",
+      submitStyle: "width:100%;padding:18px;border:none;border-radius:12px;font-family:Orbitron,sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.14em;transition:all .25s ease;" + (problem || s.submitting
+        ? "cursor:not-allowed;color:#6f6f80;background:rgba(17,17,26,0.9);"
+        : "cursor:pointer;color:#fff;background:linear-gradient(100deg,#8B2CFF,#1677FF);box-shadow:0 14px 36px -18px rgba(139,44,255,0.95);"),
+      submit: async () => {
+        if (this.problem() || s.submitting) return;
+
+        if (!s.holding) {
+          if (!s.live || !window.GG) { this.setState({ holding: true, holdLeft: 600 }); return; }
+          this.setState({ submitting: true });
+          try {
+            const startISO = s.exp === "room"
+              ? this.slotISO(s.date, s.roomSlot)
+              : this.istISO(s.date, pad(s.start) + ":00");
+            const booking = await window.GG.rpc("hold_booking", {
+              p_kind: this.dbKind(),
+              p_starts_at: startISO,
+              p_hours: s.exp === "room" ? 3 : s.duration,
+              p_full_name: s.name.trim(),
+              p_phone: tenDigits(s.phone),
+              p_email: s.email || null,
+              p_people: s.exp === "room" ? s.people : (this.hasController() ? 2 : 1),
+              p_extra_controller: s.exp === "ps5" && this.hasController(),
+              p_station_id: s.unit !== "any" ? s.unit : null,
+              p_source: "online"
+            });
+            this.setState({
+              holding: true, holdLeft: 600, submitting: false,
+              holdId: booking.id, holdRef: booking.reference, dbError: ""
+            });
+          } catch (err) {
+            this.setState({ submitting: false, dbError: err.message });
+            this.refreshAvailability();
+          }
+          return;
+        }
+
+        this.setState({
+          bookingId: s.holdRef || ("GG-" + String(1000 + Math.floor(hash(String(Date.now())) * 8999))),
+          reserved: !!s.holdId,
+          celebrate: true
+        });
+      },
+      hint: problem || false,
+
+      // Full-screen pass reveal, dismissed to the full details below.
+      // The overlay lives inside a z-index:1 wrapper, so the sticky header would
+      // otherwise sit on top of it. Hide the header while it is open.
+      headerStyle: "position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);background:rgba(5,5,9,0.72);border-bottom:1px solid rgba(176,38,255,0.35);" +
+        (s.celebrate ? "display:none;" : ""),
+      showCelebration: s.celebrate,
+      dismissCelebration: () => this.setState({ celebrate: false }),
+      // Payment is only verified by staff in admin, so the customer is told
+      // the slot is reserved — not that the booking is complete.
+      celebrationTitle: !s.reserved ? "REQUEST RECEIVED" : "SLOT RESERVED",
+      celebrationLine: !s.reserved
+        ? "WE'LL CONFIRM YOUR SLOT SHORTLY"
+        : (s.upiStep === "done" ? "PAYMENT SUBMITTED · " : "") +
+          (s.exp === "sim" ? "YOU'RE ON THE GRID" : s.exp === "room" ? "THE ROOM IS YOURS" : "YOUR STATION IS SET"),
+
+      passKindLabel: s.exp === "room" ? "PRIVATE ROOM PASS" : s.exp === "sim" ? "SIMULATOR PASS" : "STATION PASS",
+      passExperience: e.full,
+      passStatus: !s.reserved ? "PENDING" : s.upiStep === "done" ? "PAYMENT CHECKING" : "RESERVED",
+      passStatusStyle: "flex:none;font-family:var(--gg-num);font-weight:700;font-size:10px;letter-spacing:.18em;padding:7px 12px;border-radius:7px;white-space:nowrap;" +
+        (s.reserved && s.upiStep !== "done"
+          ? "color:#3ddc84;background:rgba(61,220,132,0.09);border:1px solid rgba(61,220,132,0.4);"
+          : "color:#F6C244;background:rgba(246,194,68,0.08);border:1px solid rgba(246,194,68,0.4);"),
+      passRows: [
+        { k: "DATE", v: this.dateLabel() },
+        { k: "TIME", v: this.timeLabel() },
+        { k: s.exp === "room" ? "ROOM" : "ASSIGNED", v: this.assignedUnit() },
+        { k: "GUEST", v: s.name || "—" },
+        { k: s.exp === "room" ? "PEOPLE" : "PLAYERS", v: s.exp === "room" ? s.people + " of 5" : s.people + (s.people === 1 ? " player" : " players") }
+      ].map((r, i) => ({
+        k: r.k, v: r.v,
+        wrap: "animation:ggVeil .7s ease " + (0.52 + i * 0.07).toFixed(2) + "s both",
+        valueStyle: "font-family:var(--gg-num);font-weight:700;font-size:clamp(14px,2vw,16.5px);line-height:1.3;color:#fff"
+      })),
+      passReference: s.bookingId || "—",
+      passAmountLabel: !s.reserved ? "ESTIMATED" : s.upiStep === "done" ? "AMOUNT PAID" : "AMOUNT DUE",
+      passAmount: money(this.total()),
+      // ---- Payment first, pass second — never both at once ----
+      showUpi: s.reserved && !!(s.upi.id || s.upi.qr) && s.upiStep !== "off" && s.upiStep !== "done",
+      showPass: !(s.reserved && !!(s.upi.id || s.upi.qr) && s.upiStep !== "off" && s.upiStep !== "done"),
+      // An uploaded QR has no amount baked in, so say so plainly.
+      upiAmountNote: s.upi.qr && !s.upi.payload
+        ? "Enter this amount when you pay"
+        : "Amount is already filled in when you scan",
+      upiHeading: s.upiStep === "ref" ? "ONE LAST STEP" : "SECURE YOUR SLOT",
+      upiSubheading: s.upiStep === "ref" ? "CONFIRM YOUR PAYMENT" : "PAY BY UPI TO CONFIRM",
+      upiWhenLabel: s.exp === "room" ? "SLOT" : "TIME",
+      upiWhen: this.timeLabel(),
+      upiStepPay: s.upiStep === "pay",
+      upiStepRef: s.upiStep === "ref",
+
+      upiId: s.upi.id || "the QR above",
+      // Background image rather than <img src="{{ }}">: an unresolved hole in a
+      // src attribute is fetched as a literal URL before renderVals() runs.
+      upiQrStyle: (() => {
+        const url = this.upiQrUrl();
+        return url
+          ? "display:block;width:clamp(150px,42vw,190px);aspect-ratio:1;background-image:url('" +
+            url + "');background-size:cover;background-position:center"
+          : "display:none";
+      })(),
+      upiAppHref: this.upiLink(),
+      upiRef: s.upiRef,
+      setUpiRef: (ev) => this.setState({ upiRef: ev.target.value, upiError: "" }),
+      upiError: s.upiError || false,
+      upiBusy: s.upiBusy,
+      upiFieldStyle: "padding:15px 16px;border-radius:12px;background:rgba(5,5,9,0.7);border:1px solid color-mix(in srgb, var(--gg-highlight) 40%, transparent);color:#fff;font-size:17px;letter-spacing:.06em;outline:none;width:100%;font-family:var(--gg-num);font-weight:700",
+      upiSubmitStyle: "width:100%;margin-top:14px;padding:16px;border:none;border-radius:11px;font-family:var(--gg-head);font-size:11px;font-weight:700;letter-spacing:.14em;color:#fff;background:linear-gradient(100deg,var(--gg-purple),var(--gg-blue));" +
+        (s.upiBusy ? "opacity:.6;cursor:wait;" : "cursor:pointer;"),
+      upiSubmitLabel: s.upiBusy ? "SUBMITTING…" : "SUBMIT REFERENCE",
+      // Returns to the form with the slot released, so changing your mind
+      // before paying does not leave a phantom hold on the station.
+      // Hidden once a UPI reference is submitted — that booking is a paid claim
+      // now and must not be released by stepping back.
+      showBack: s.upiStep !== "done",
+      backToForm: async () => {
+        const id = s.holdId;
+        this.setState({
+          celebrate: false, bookingId: null, reserved: false,
+          holdId: null, holdRef: null, holding: false,
+          upiStep: "pay", upiRef: "", upiError: ""
+        });
+        if (id && window.GG) {
+          try { await window.GG.rpc("release_hold", { p_booking_id: id }); } catch (err) { /* it will expire */ }
+        }
+        this.refreshAvailability();
+      },
+      upiPaid: () => this.setState({ upiStep: "ref", upiError: "" }),
+      upiBack: () => this.setState({ upiStep: "pay", upiError: "" }),
+      // Nobody should be trapped on the QR. The slot is already held, so
+      // stepping past it just shows the pass and leaves payment for the counter.
+      upiSkip: () => this.setState({ upiStep: "off", upiError: "" }),
+      submitUpiRef: async () => {
+        const ref = String(s.upiRef || "").replace(/\s/g, "");
+        if (ref.length < 8) { this.setState({ upiError: "Please enter the full reference number from your UPI app." }); return; }
+        if (!s.holdId) { this.setState({ upiError: "This booking is no longer active — please book again." }); return; }
+        this.setState({ upiBusy: true, upiError: "" });
+        try {
+          await window.GG.rpc("claim_upi_payment", { p_booking_id: s.holdId, p_reference: ref });
+          this.setState({ upiBusy: false, upiStep: "done" });
+        } catch (err) {
+          this.setState({
+            upiBusy: false,
+            upiError: /already been used/i.test(err.message)
+              ? "That reference has already been used. Check you copied the right one."
+              : /find the function|PGRST202/i.test(err.message)
+                ? "Payment recording is not set up yet — please pay at the counter."
+                : err.message
+          });
+        }
+      },
+
+      passFootnote: !s.reserved
+        ? "We could not reach the booking system — please call us to confirm."
+        : s.upiStep === "pay"
+          ? "Your slot is held for 10 minutes while you pay."
+          : s.upiStep === "ref"
+            ? "Your slot stays held once you submit the reference."
+            : s.upiStep === "done"
+              ? "We're checking your payment now. Your slot cannot be given to anyone else while we do."
+              : "Show this reference at the counter. Please arrive 10 minutes early.",
+
+      reservedReal: !!s.reserved,
+      confirmPanelStyle: s.reserved
+        ? "background:linear-gradient(165deg,rgba(61,220,132,0.1),rgba(139,44,255,0.1) 60%,rgba(17,17,26,0.97));border:1px solid rgba(61,220,132,0.45);border-radius:18px;padding:clamp(24px,3vw,38px);max-width:660px;box-shadow:0 30px 80px -50px rgba(61,220,132,0.6)"
+        : "background:linear-gradient(165deg,rgba(246,194,68,0.1),rgba(139,44,255,0.1) 60%,rgba(17,17,26,0.97));border:1px solid rgba(246,194,68,0.5);border-radius:18px;padding:clamp(24px,3vw,38px);max-width:660px;box-shadow:0 30px 80px -50px rgba(246,194,68,0.5)",
+      confirmBadgeWrap: s.reserved
+        ? "display:inline-flex;align-items:center;gap:10px;padding:8px 15px;border-radius:100px;background:rgba(61,220,132,0.1);border:1px solid rgba(61,220,132,0.4);margin-bottom:22px;color:#3ddc84"
+        : "display:inline-flex;align-items:center;gap:10px;padding:8px 15px;border-radius:100px;background:rgba(246,194,68,0.1);border:1px solid rgba(246,194,68,0.45);margin-bottom:22px;color:#F6C244",
+      confirmHeading: s.reserved ? "SLOT RESERVED" : "REQUEST RECEIVED",
+      confirmBadge: s.reserved ? "RESERVED — PAY AT COUNTER" : "AWAITING CONFIRMATION",
+      confirmNote: s.reserved
+        ? "Your slot is held under this reference. Pay at the counter when you arrive and our staff will confirm it. Please arrive 10 minutes early — unpaid reservations are released."
+        : "We could not reach the booking system just now. Please call us to confirm this slot.",
+      amountLabel: "AMOUNT DUE",
+
+      confirmation: [
+        { k: "BOOKING ID", v: s.bookingId || "—" },
+        { k: "EXPERIENCE", v: e.full },
+        { k: "DATE", v: this.dateLabel() },
+        { k: "TIME", v: this.timeLabel() },
+        { k: s.exp === "room" ? "ROOM" : "STATION", v: this.assignedUnit() },
+        { k: "CUSTOMER", v: s.name || "—" },
+        { k: "AMOUNT DUE", v: money(this.total()) }
+      ],
+      emailNote: s.email ? " and email" : "",
+
+      reset: () => this.setState(
+        { bookingId: null, holding: false, holdLeft: 600, name: "", phone: "", email: "", holdId: null, holdRef: null, reserved: false },
+        () => this.refreshAvailability()
+      )
+    };
+  }
+}
+
+</script>
+</body>
+</html>

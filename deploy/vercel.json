@@ -1,0 +1,17 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/Games Grid Home.dc.html" },
+    { "source": "/booking", "destination": "/Games Grid Booking.dc.html" },
+    { "source": "/account", "destination": "/Games Grid Account.dc.html" },
+    { "source": "/admin", "destination": "/Games Grid Admin.dc.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}
